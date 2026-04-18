@@ -1,6 +1,7 @@
 # 🚀 Vorynex Billing
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Platform: Windows](https://img.shields.io/badge/Platform-Windows-blue)](https://github.com/OtavioTavaresDev/vorynex-billing/releases)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-success)](https://github.com/OtavioTavaresDev/vorynex-billing/releases)
 [![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational)](https://github.com/OtavioTavaresDev/vorynex-billing/releases)
 
@@ -29,6 +30,13 @@
 
 ## 📥 Download e Instalação
 
+### 🪟 Windows
+
+1. Baixe o instalador `Vorynex Billing Setup 2.0.0.exe` da [página de releases](https://github.com/OtavioTavaresDev/vorynex-billing/releases/latest)
+2. Execute o instalador (duplo clique)
+3. Siga as instruções na tela
+4. O app será instalado e abrirá automaticamente
+
 ### 🐧 Linux (AppImage)
 
 1. Baixe o arquivo `Vorynex Billing-2.0.0.AppImage` da [página de releases](https://github.com/OtavioTavaresDev/vorynex-billing/releases/latest)
@@ -40,9 +48,6 @@ Execute com dois cliques ou:
 bash
 ./"Vorynex Billing-2.0.0.AppImage"
 Pronto! O app abre automaticamente. Nada de Node.js, npm ou dependências.
-
-🪟 Windows (em breve)
-Build para Windows disponível em breve.
 
 🍎 macOS (em breve)
 Build para macOS disponível em breve.
@@ -59,8 +64,6 @@ A versão demo possui limitações:
 Credenciais padrão (primeiro acesso):
 
 Crie sua conta admin no primeiro acesso
-
-Ou use: admin / admin (se já configurado)
 
 Para uso ilimitado, adquira a versão completa.
 
@@ -88,7 +91,7 @@ bash
 # Linux (AppImage)
 npm run build:linux
 
-# Windows (requer Wine)
+# Windows (requer Wine no Linux)
 npm run build:win
 
 # macOS
@@ -115,7 +118,7 @@ Autenticação com roles
 
 Build para Linux (AppImage)
 
-Build para Windows
+Build para Windows (.exe)
 
 Build para macOS
 
