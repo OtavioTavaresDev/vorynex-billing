@@ -1,0 +1,120 @@
+# Dependências
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+out/
+build/
+
+# Banco de dados SQLite
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+db/*.db
+db/*.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# Electron
+electron-builder.yaml
+builder-effective-config.yaml
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+dist-ssr/
+*.local
+
+# Arquivos temporários
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Backups
+*.bak
+*.backup
+*.old
+
+# Arquivos grandes (ajuste conforme necessário)
+*.zip
+*.tar.gz
+*.7z
+*.rar
+
+# Credenciais e segredos
+*.pem
+*.key
+*.crt
+*.p12
+secrets.json
+config.local.js
+
+# Testes
+coverage/
+.nyc_output/
+*.lcov
+
+# TypeScript (se não estiver usando)
+*.tsbuildinfo
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.directory
+.Trash-*

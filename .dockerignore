@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.git/
+.gitignore
+*.db
+*.log
+.DS_Store
+.env
+coverage/
+.nyc_output/
+.vscode/
+.idea/
+*.swp
+*.swo

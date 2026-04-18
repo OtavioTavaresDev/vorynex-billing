@@ -1,0 +1,49 @@
+{
+  "name": "vorynex-billing",
+  "version": "2.0.0",
+  "description": "Sistema de billing com dashboard administrativo profissional",
+  "main": "main.js",
+  "homepage": "https://otaviotavaresdev.github.io/vorynex/",
+  "author": {
+    "name": "Vorynex",
+    "email": "contato@vorynex.com"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build:linux": "electron-builder --linux --publish never",
+    "build:win": "electron-builder --win"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.4.3",
+    "bcryptjs": "^2.4.3",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.vorynex.billing",
+    "productName": "Vorynex Billing",
+    "directories": {
+      "output": "dist"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "files": [
+      "main.js",
+      "public/**/*",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ]
+  }
+}

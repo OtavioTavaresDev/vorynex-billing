@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorynex Billing - Dashboard Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #0f172a; color: #e2e8f0; }
+    .dark .bg-white { background-color: #1e293b !important; }
+    .dark .text-gray-800 { color: #f1f5f9 !important; }
+    .dark .border-gray-100 { border-color: #334155 !important; }
+    .dark .bg-gray-50 { background-color: #0f172a !important; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+  <div id="app" class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-gray-300 flex flex-col fixed inset-y-0 left-0 z-30">
+      <div class="p-5 border-b border-gray-800 flex items-center space-x-3">
+        <img src="assets/vorynex.png" alt="Vorynex" class="h-8 w-auto"
+             onerror="this.onerror=null; this.src='/vorynex.png';"
+             onabort="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg items-center justify-center hidden">
+          <svg width="24" height="24" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="60" rx="12" fill="#4F46E5"/>
+            <path d="M15 30L30 15L45 30L30 45L15 30Z" fill="white"/>
+            <circle cx="30" cy="30" r="8" fill="#4F46E5"/>
+          </svg>
+        </div>
+        <span class="text-white font-semibold text-lg">Vorynex</span>
+      </div>
+      
+      <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+        <a href="#" class="nav-item flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-indigo-600 text-white">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span data-i18n="dashboard">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <span data-i18n="clients">Clientes</span>
+        </a>
+        <a href="#" class="nav-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+          <span data-i18n="transactions">Transações</span>
+        </a>
+        
+        <!-- Itens bloqueados -->
+        <a href="#" class="locked-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+          <span class="mr-3">🔒</span> <span data-i18n="dataAnalysis">Análise de dados</span>
+        </a>
+        <a href="#" class="locked-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+          <span class="mr-3">🔒</span> <span data-i18n="invoices">Notas fiscais</span>
+        </a>
+        <a href="#" class="locked-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+          <span class="mr-3">🔄</span> <span data-i18n="refreshData">Atualizar dados</span>
+        </a>
+        
+        <div class="pt-4 mt-4 border-t border-gray-800">
+          <a href="/whyvorynex.html" id="whyVorynexLink" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span data-i18n="whyVorynex">Por que escolher a Vorynex?</span>
+          </a>
+          <a href="#" id="deepAnalysisLink" class="locked-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span data-i18n="deepAnalysis">Análise profunda de dados</span>
+          </a>
+        </div>
+
+        <!-- Premium -->
+        <div class="pt-4 mt-4 border-t border-gray-800">
+          <p class="px-4 text-xs uppercase tracking-wider text-gray-500 mb-2" data-i18n="premium">Premium</p>
+          <a href="#" class="locked-item flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-500 hover:bg-gray-800 cursor-not-allowed">
+            <span class="mr-3">🔒</span> <span data-i18n="aiReview">Revisão com IA</span>
+          </a>
+          <a href="#" id="upgradeLink" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-indigo-400 hover:bg-gray-800 hover:text-indigo-300 transition mt-2">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            <span data-i18n="upgrade">Atualizar para versão oficial</span>
+          </a>
+        </div>
+
+        <!-- Certificado -->
+        <div class="pt-2">
+          <a href="#" id="licenseLink" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span data-i18n="license">Certificado de Licença</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="p-4 border-t border-gray-800 text-xs text-center text-gray-500" id="whiteLabelFooter">
+        Vorynex © Sistema de Inteligência Financeira
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-8 overflow-y-auto">
+      <!-- Topbar -->
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white" data-i18n="dashboard">Dashboard</h1>
+        <div class="flex items-center space-x-4">
+          <!-- Seletor de idioma -->
+          <select id="languageSelect" class="px-3 py-1.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm">
+            <option value="pt">🇧🇷 PT</option>
+            <option value="en">🇺🇸 EN</option>
+            <option value="es">🇪🇸 ES</option>
+          </select>
+          <button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">🌙</button>
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-200 font-semibold">
+              <span id="userInitial">A</span>
+            </div>
+            <div>
+              <p id="loggedUser" class="text-sm font-medium text-gray-700 dark:text-gray-200"></p>
+              <p id="userRole" class="text-xs text-gray-500 dark:text-gray-400"></p>
+            </div>
+          </div>
+          <button id="logoutBtn" class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" data-i18n="logout">Sair</button>
+        </div>
+      </div>
+
+      <!-- Demo warning -->
+      <div class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg text-yellow-800 dark:text-yellow-200 text-sm flex items-center">
+        <span class="mr-2">⚠️</span> <span data-i18n="demoWarning">Versão DEMO limitada a 3 clientes, 3 transações e 3 usuários. Para acesso completo, adquira a versão completa.</span>
+      </div>
+
+      <!-- Métricas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="totalRevenue">Receita Total</p>
+          <p class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white truncate" id="totalRevenue">R$ 0,00</p>
+          <p class="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span id="revenueGrowth">-</span></p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="monthlyRevenue">Receita do Mês</p>
+          <p class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white truncate" id="monthlyRevenue">R$ 0,00</p>
+          <p class="text-sm text-green-600 dark:text-green-400 mt-2 flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span id="monthlyGrowth">-</span></p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="clients">Clientes</p>
+          <p class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white" id="totalClients">0</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2"><span data-i18n="limit">Limite</span>: 3</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="transactions">Transações</p>
+          <p class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white" id="totalTransactions">0</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2"><span data-i18n="limit">Limite</span>: 3</p>
+        </div>
+      </div>
+
+      <!-- Gráfico interativo -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8">
+        <div class="flex flex-wrap items-center justify-between mb-4 gap-4">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-white" data-i18n="revenue">Receita</h2>
+          <div class="flex flex-wrap items-center gap-3">
+            <select id="chartPeriod" class="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm">
+              <option value="7" data-i18n="last7days">Últimos 7 dias</option>
+              <option value="1" data-i18n="today">Hoje (1 dia)</option>
+              <option value="30" data-i18n="last30days">Últimos 30 dias</option>
+              <option value="365" data-i18n="lastYear">Último ano</option>
+              <option value="custom" data-i18n="custom">Personalizado...</option>
+            </select>
+            <select id="chartType" class="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm">
+              <option value="bar" data-i18n="bars">Barras</option>
+              <option value="line" data-i18n="line">Linha</option>
+              <option value="area" data-i18n="area">Área</option>
+            </select>
+            <div class="flex space-x-1">
+              <button data-period="1" class="period-shortcut px-2 py-1 text-xs border rounded hover:bg-gray-100 dark:hover:bg-gray-700">1d</button>
+              <button data-period="7" class="period-shortcut px-2 py-1 text-xs border rounded hover:bg-gray-100 dark:hover:bg-gray-700">1s</button>
+              <button data-period="30" class="period-shortcut px-2 py-1 text-xs border rounded hover:bg-gray-100 dark:hover:bg-gray-700">1m</button>
+              <button data-period="365" class="period-shortcut px-2 py-1 text-xs border rounded hover:bg-gray-100 dark:hover:bg-gray-700">1a</button>
+            </div>
+          </div>
+        </div>
+        <div id="customPeriodInputs" class="hidden mb-4 flex items-center gap-2">
+          <input type="date" id="startDate" class="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm">
+          <span class="dark:text-white" data-i18n="to">até</span>
+          <input type="date" id="endDate" class="px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm">
+          <button id="applyCustomPeriod" class="px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700" data-i18n="apply">Aplicar</button>
+        </div>
+        <div class="h-64">
+          <canvas id="revenueChart"></canvas>
+        </div>
+        <p id="noDataMessage" class="text-center text-gray-500 dark:text-gray-400 mt-4 hidden" data-i18n="noData">Sem dados para o período selecionado.</p>
+      </div>
+
+      <!-- Tabelas -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Clientes -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white" data-i18n="clients">Clientes</h2>
+            <div class="flex space-x-2">
+              <input type="text" id="clientSearch" placeholder="Buscar..." class="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+              <button id="addClientBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-1.5 rounded-lg transition">+ <span data-i18n="new">Novo</span></button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300">ID</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="name">Nome</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300">Email</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="actions">Ações</th></tr>
+              </thead>
+              <tbody id="clientsTableBody" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody>
+            </table>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2"><span data-i18n="demoLimitClients">Limite demo: 3 clientes.</span></p>
+        </div>
+
+        <!-- Transações -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white" data-i18n="transactions">Transações</h2>
+            <div class="flex space-x-2">
+              <input type="text" id="transactionSearch" placeholder="Filtrar..." class="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+              <button id="addTransactionBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-1.5 rounded-lg transition">+ <span data-i18n="new">Nova</span></button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300">ID</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="client">Cliente</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="amount">Valor</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="date">Data</th><th class="px-4 py-3 text-left text-gray-600 dark:text-gray-300" data-i18n="actions">Ações</th></tr>
+              </thead>
+              <tbody id="transactionsTableBody" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody>
+            </table>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2"><span data-i18n="demoLimitTransactions">Limite demo: 3 transações.</span></p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals (mantidos) -->
+  <div id="licenseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg p-6">
+      <h3 class="text-xl font-bold mb-4 dark:text-white" data-i18n="licenseCert">Certificado de Licença (Demo)</h3>
+      <div class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+        <p><strong>Vorynex Billing - Versão Demonstrativa</strong></p>
+        <p data-i18n="licenseText1">Esta é uma licença de avaliação limitada a:</p>
+        <ul class="list-disc pl-5">
+          <li data-i18n="licenseItem1">3 clientes</li>
+          <li data-i18n="licenseItem2">3 transações</li>
+          <li data-i18n="licenseItem3">3 usuários</li>
+        </ul>
+        <p data-i18n="licenseText2">Para uso comercial ou sem limitações, adquira a versão completa em www.vorynex.com.</p>
+        <p class="mt-4 text-xs">© 2025 Vorynex. Todos os direitos reservados.</p>
+      </div>
+      <div class="mt-6 flex justify-end">
+        <button id="closeLicenseModal" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" data-i18n="close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="clientModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6">
+      <h3 id="clientModalTitle" class="text-xl font-bold mb-4 dark:text-white">Novo Cliente</h3>
+      <form id="clientForm">
+        <input type="hidden" id="clientId">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300" data-i18n="name">Nome</label>
+          <input type="text" id="clientName" required class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300">Email</label>
+          <input type="email" id="clientEmail" required class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" id="closeClientModal" class="px-4 py-2 border rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700" data-i18n="cancel">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" data-i18n="save">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="transactionModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6">
+      <h3 class="text-xl font-bold mb-4 dark:text-white">Nova Transação</h3>
+      <form id="transactionForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300" data-i18n="client">Cliente</label>
+          <select id="transactionClientId" required class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300" data-i18n="amount">Valor (R$)</label>
+          <input type="number" step="0.01" id="transactionAmount" required class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300" data-i18n="date">Data</label>
+          <input type="date" id="transactionDate" required class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" id="closeTransactionModal" class="px-4 py-2 border rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700" data-i18n="cancel">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" data-i18n="save">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script inline para configurar listeners com confirmação i18n -->
+  <script>
+    // Aguardar carregamento do app.js para ter as traduções disponíveis
+    document.addEventListener('DOMContentLoaded', function() {
+      // Função auxiliar para obter mensagem traduzida (será sobrescrita pelo app.js, mas fallback)
+      const t = (key) => {
+        if (window.translations && window.translations[window.currentLang] && window.translations[window.currentLang][key]) {
+          return window.translations[window.currentLang][key];
+        }
+        // Fallbacks estáticos
+        const fallbacks = {
+          pt: {
+            upgradeConfirm: 'Deseja atualizar para a versão oficial? Você será redirecionado para a loja.',
+            lockedConfirm: 'Este recurso está disponível apenas na versão oficial. Deseja conhecer a versão completa?'
+          },
+          en: {
+            upgradeConfirm: 'Do you want to upgrade to the official version? You will be redirected to the store.',
+            lockedConfirm: 'This feature is only available in the official version. Would you like to learn more about the full version?'
+          },
+          es: {
+            upgradeConfirm: '¿Desea actualizar a la versión oficial? Será redirigido a la tienda.',
+            lockedConfirm: 'Esta función solo está disponible en la versión oficial. ¿Desea conocer la versión completa?'
+          }
+        };
+        const lang = localStorage.getItem('language') || 'pt';
+        return fallbacks[lang]?.[key] || fallbacks.pt[key];
+      };
+
+      const UPGRADE_URL = 'https://otaviotavaresdev.github.io/vorynex/';
+
+      // Upgrade link
+      const upgradeLink = document.getElementById('upgradeLink');
+      if (upgradeLink) {
+        upgradeLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm(t('upgradeConfirm'))) {
+            window.open(UPGRADE_URL, '_blank');
+          }
+        });
+      }
+
+      // Itens bloqueados
+      document.querySelectorAll('.locked-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (confirm(t('lockedConfirm'))) {
+            window.open(UPGRADE_URL, '_blank');
+          }
+        });
+      });
+
+      // Fallback da logo
+      const logoImg = document.querySelector('img[alt="Vorynex"]');
+      if (logoImg) {
+        logoImg.addEventListener('error', function() {
+          this.style.display = 'none';
+          this.nextElementSibling.style.display = 'flex';
+        });
+      }
+    });
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
